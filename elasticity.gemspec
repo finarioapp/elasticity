@@ -12,8 +12,7 @@ Gem::Specification.new do |s|
   s.summary               = %q{Streamlined, programmatic access to Amazon's Elastic Map Reduce service.}
   s.description           = %q{Streamlined, programmatic access to Amazon's Elastic Map Reduce service, driven by the Sharethrough team's requirements for belting out EMR jobs.}
 
-  s.add_dependency('rest-client', '~> 1.0')
-  s.add_dependency('fog-aws', '~> 1.0')
+  s.add_dependency('fog-aws', '~> 0.12')
   s.add_dependency('unf', '~> 0.1')
 
   s.add_development_dependency('factory_girl', '~> 4.0')

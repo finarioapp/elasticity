@@ -12,14 +12,17 @@ module Elasticity
 
     # With the advent of v4 signing, we can skip the complex translation from v2
     # and ship the JSON over with nearly the same structure.
-    def self.convert_ruby_to_aws_v4(value)
+    def self.convert_ruby_to_aws_v4(value, options = {})
       case value
         when Array
           return value.map{|v| convert_ruby_to_aws_v4(v)}
         when Hash
+          value_options = options.clone
           result = {}
           value.each do |k,v|
-            result[camelize(k.to_s)] = convert_ruby_to_aws_v4(v)
+            key = options[:skip_key_camelize] ? k.to_s : camelize(k.to_s)
+            value_options.merge!( skip_key_camelize: true ) if key == "Properties"
+            result[key] = convert_ruby_to_aws_v4(v, value_options)
           end
           return result
         else

@@ -1,3 +1,4 @@
+**2021 Finario Update** Changed dependency in gemspec for rest-client. Patched all the changes that were made in extensions. Fixed spec tests to reflect changes. 
 **2021 Update** As you can see from the modification dates, this gem hasn't been updated for years and the build is currently failing due to an ancient version of Ruby. Please consider this repository no longer maintained and not recommended for production use. I'm leaving it available in the off chance some portion of its source may be useful to others.
 
 Best of luck! -- Rob

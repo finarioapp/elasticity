@@ -34,6 +34,8 @@ module Elasticity
     attr_accessor :additional_master_security_groups
     attr_accessor :additional_slave_security_groups
     attr_accessor :timeout
+    attr_accessor :security_configuration
+    attr_accessor :configurations
 
     def initialize
       @action_on_failure = 'TERMINATE_JOB_FLOW'
@@ -190,11 +192,11 @@ module Elasticity
       ClusterStatus.from_aws_data(emr.describe_cluster(@jobflow_id))
     end
 
-    def cluster_step_status
+    def cluster_step_status( options = {} )
       if !is_jobflow_running?
         raise JobFlowNotStartedError, 'Please #run this job flow before attempting to retrieve status.'
       end
-      ClusterStepStatus.from_aws_list_data(emr.list_steps(@jobflow_id))
+      ClusterStepStatus.from_aws_list_data(emr.list_steps(@jobflow_id, options))
     end
 
     def wait_for_completion(&on_wait)
@@ -221,17 +223,17 @@ module Elasticity
       config = jobflow_preamble
       validate_and_apply_ami_or_release_version(config)
       steps = jobflow_steps
-      steps.insert(0, Elasticity::SetupHadoopDebuggingStep.new(@region).to_aws_step(self)) if @enable_debugging
+      steps.insert(0, Elasticity::SetupHadoopDebuggingStep.new.to_aws_step(self)) if @enable_debugging
       config[:steps] = steps
       config[:log_uri] = @log_uri if @log_uri
       config[:tags] = jobflow_tags if @tags
       config[:job_flow_role] = @job_flow_role if @job_flow_role
       config[:service_role] = @service_role if @service_role
       config[:additional_info] = @additional_info if @additional_info
-      config[:security_configuration] = @security_configuration if @security_configuration
       config[:bootstrap_actions] = @bootstrap_actions.map(&:to_aws_bootstrap_action) unless @bootstrap_actions.empty?
       config[:applications] = @aws_applications.map(&:to_hash) if valid_aws_applications?
-      config[:configurations] = @aws_configurations unless @aws_configurations.empty?
+      config[:security_configuration] = @security_configuration if @security_configuration
+      config[:configurations] = @configurations if @configurations
       config
     end
 

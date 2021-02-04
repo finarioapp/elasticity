@@ -352,7 +352,7 @@ describe Elasticity::JobFlow do
         before do
           jobflow_with_steps.log_uri = '_'
           jobflow_with_steps.enable_debugging = true
-          aws_steps.insert(0, Elasticity::SetupHadoopDebuggingStep.new('us-east-1').to_aws_step(jobflow_with_steps))
+          aws_steps.insert(0, Elasticity::SetupHadoopDebuggingStep.new.to_aws_step(jobflow_with_steps))
         end
         it 'should incorporate the step to setup Hadoop debugging' do
           jobflow_with_steps.send(:jobflow_config).should be_a_hash_including({:steps => aws_steps})
@@ -569,7 +569,7 @@ describe Elasticity::JobFlow do
 
       context 'with configurations' do
         it 'sets the configurations as a part of its config' do
-          subject.instance_variable_set(:@aws_configurations, [configuration])
+          subject.configurations = [configuration]
           config = subject.send(:jobflow_config)
           expect(config[:configurations]).to eql([configuration])
         end
@@ -799,7 +799,7 @@ describe Elasticity::JobFlow do
       end
 
       it 'should return the AWS status' do
-        emr.should_receive(:list_steps).with('JOBFLOW_ID').and_return('AWS_CLUSTER_STATUS')
+        emr.should_receive(:list_steps).with('JOBFLOW_ID',{}).and_return('AWS_CLUSTER_STATUS')
         Elasticity::ClusterStepStatus.should_receive(:from_aws_list_data).with('AWS_CLUSTER_STATUS').and_return([build(:cluster_step_status)])
 
         status = running_jobflow.cluster_step_status

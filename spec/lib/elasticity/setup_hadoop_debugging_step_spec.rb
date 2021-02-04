@@ -1,7 +1,7 @@
 describe Elasticity::SetupHadoopDebuggingStep do
 
   subject do
-    Elasticity::SetupHadoopDebuggingStep.new('us-east-1')
+    Elasticity::SetupHadoopDebuggingStep.new
   end
 
   it 'should be a CustomJarStep' do
@@ -9,9 +9,9 @@ describe Elasticity::SetupHadoopDebuggingStep do
   end
 
   it 'should set the appropriate fields' do
-    expect(subject.name).to eql('Elasticity Setup Hadoop Debugging')
-    expect(subject.jar).to eql('s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar')
-    expect(subject.arguments).to eql(['s3://us-east-1.elasticmapreduce/libs/state-pusher/0.1/fetch'])
+    expect(subject.name).to eql('Elasticity (patched) Setup Hadoop Debugging')
+    expect(subject.jar).to eql('command-runner.jar')
+    expect(subject.arguments).to eql(['state-pusher-script'])
     expect(subject.action_on_failure).to eql('TERMINATE_JOB_FLOW')
   end
 
