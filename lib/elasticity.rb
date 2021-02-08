@@ -2,7 +2,7 @@ require 'base64'
 require 'time'
 require 'json'
 
-require 'rest_client'
+require 'rest-client'
 require 'nokogiri'
 require 'fog/aws'
 
