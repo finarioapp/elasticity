@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('fog-aws', '~> 0.12')
   s.add_dependency('unf', '~> 0.1')
-  s.add_dependency('rest-client')
+  s.add_dependency('rest-client', '2.0.0')
 
   s.add_development_dependency('factory_girl', '~> 4.0')
   s.add_development_dependency('fakefs', '~> 0.4.0')
